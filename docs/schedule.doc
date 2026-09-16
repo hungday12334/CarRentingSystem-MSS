@@ -1,0 +1,13 @@
+1. Time: Week 2 & 3
+2. Các service
+- Customer service: Quản lý thông tin người dùng
+- Car: quản lý thông tin liên quan đến ô tô, bên cung cấp, nhà sản xuất
+- Renting: quản lý quá trình thuê xe. Từ việc tạo đơn, thanh toán, theo dõi và duy trì lịch sử thuê.
+- API gateway: điểm vào duy nhất từ client tới các service. Dùng để xác minh thông tin từ jwt của client gửi tới.
+- Service Discovery: nơi lưu trữ địa chỉ các service.
+- KeyCloak: quản lý user, tạo token,....
+- FE: vibe code với react.
+3. Achieve
+- Hoàn thiện được các service backend ở mức cơ bản, đủ chức năng thôi, chạy được ở local. Đặc biệt theo hướng Cloud-native mặc dù chưa chắc có thể deploy được.
+4. Database 
+- Mỗi service là một database riêng.
