@@ -12,19 +12,19 @@ spring:
 #              lower-case-service-id: true
           routes:
             - id: customer_service_route
-              uri: http://localhost:8000
+              uri: lb://CUSTOMER-SERVICE
               predicates:
                 - Path=/customer-service/**
               filters:
                 - StripPrefix=1
             - id: car_service_route
-              uri: http://localhost:8100
+              uri: lb://CAR-SERVICE
               predicates:
                 - Path=/car-service/**
               filters:
                 - StripPrefix=1
             - id: renting_service_route
-              uri: http://localhost:8200
+              uri: lb://RENTING-SERVICE
               predicates:
                 - Path=/renting-service/**
               filters:
