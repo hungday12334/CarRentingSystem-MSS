@@ -1,25 +1,26 @@
 package com.example.car.controller;
 
+import com.example.car.dto.PingView;
+import com.example.car.service.PingService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/car")
 public class PingController {
+    private final PingService pingService;
 
     @GetMapping("/ping")
-    public Map<String, String> ping() {
-        return Map.of(
-                "service", "car-service",
-                "status", "UP"
-        );
+    public ResponseEntity<PingView> ping() {
+        return ResponseEntity.ok(pingService.getPing());
     }
 
     @GetMapping("/exception")
-    public Map<String, String> exception() {
-        throw new RuntimeException("Car service test exception");
+    public ResponseEntity<PingView> exception() {
+        return ResponseEntity.ok(pingService.getException());
     }
 }
