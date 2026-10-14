@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -20,11 +21,20 @@ public class CorrelationFilter implements GlobalFilter, Ordered {
         log.info("Start correlation filter in API Gateway");
         ServerHttpRequest request = exchange.getRequest();
         List<String> correlationID = request.getHeaders().get(Constants.CORRELATION_ID_HEADER);
-        log.info("Correlation Id: {}", correlationID.toString());
+        List<String> jwtToken = request.getHeaders().get(HttpHeaders.AUTHORIZATION);
+        if(jwtToken!=null || !jwtToken.isEmpty()){
+            log.info("Jwt token : {}", jwtToken.toString());
+        }else{
+            log.info("Không nhận được jwt");
+        }
         ServerHttpRequest mutateRequest = null;
         if(correlationID==null || correlationID.isEmpty()){
-            mutateRequest = request.mutate().header(Constants.CORRELATION_ID_HEADER, UUID.randomUUID().toString()).build();
+            String newCorrelationId = UUID.randomUUID().toString();
+            mutateRequest = request.mutate().header(Constants.CORRELATION_ID_HEADER,newCorrelationId).build();
+        }else{
+            log.info("Correlation Id: {}", correlationID.toString());
         }
+
         return chain.filter(exchange.mutate().request(mutateRequest).build()).doFinally((e) ->{
             log.info("Finish Correlation Filter in API Gateway");
         });
