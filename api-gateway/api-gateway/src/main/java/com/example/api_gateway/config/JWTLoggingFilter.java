@@ -23,7 +23,7 @@ public class JWTLoggingFilter implements GlobalFilter, Ordered {
         return exchange.getPrincipal()
                 .filter(JwtAuthenticationToken.class::isInstance)
                 .cast(JwtAuthenticationToken.class)
-                .flatMap((p) -> {
+                .map((p) -> {
 
                     String email = p.getToken().getClaimAsString("email");
                     log.info("User email is : {}", email);
@@ -38,10 +38,11 @@ public class JWTLoggingFilter implements GlobalFilter, Ordered {
                     }).build();
                     //Tạo exchange mới
                     ServerWebExchange mutateExchange = exchange.mutate().request(mutateRequest).build();
-                    return chain.filter(mutateExchange);
+                    return mutateExchange;
 
                 })
-                .switchIfEmpty(Mono.defer(() -> chain.filter(exchange)));
+                .defaultIfEmpty(exchange)
+                .flatMap(ex -> chain.filter(exchange));
     }
 
     @Override
