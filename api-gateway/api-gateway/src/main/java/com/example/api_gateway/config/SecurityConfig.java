@@ -21,7 +21,7 @@ public class SecurityConfig {
                 csrf((e) -> e.disable())
                 .authorizeExchange((authorizeExchangeSpec -> authorizeExchangeSpec
                         .pathMatchers("/actuator/health/**", "/public").permitAll()
-                        .pathMatchers("/renting-service").hasRole("ROLE_CUSTOMER")
+                        .pathMatchers("/renting-service/**").hasRole("CUSTOMER")
                         .anyExchange().authenticated()
                 ))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtSpec -> {
